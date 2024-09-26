@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
   tab: {
     color: theme.colors.appBarPrimary,
     fontWeight: theme.fontWeights.bold,
+    marginRight: 25,
   },
 });
 
