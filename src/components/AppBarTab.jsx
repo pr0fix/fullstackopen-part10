@@ -3,18 +3,10 @@ import { Text, StyleSheet } from "react-native";
 import theme from "../theme";
 import { Link } from "react-router-native";
 
-const styles = StyleSheet.create({
-  tab: {
-    color: theme.colors.appBarPrimary,
-    fontWeight: theme.fontWeights.bold,
-    marginRight: 25,
-  },
-});
-
 const AppBarTab = ({ title, to }) => {
   return (
     <Link to={to}>
-      <Text style={styles.tab}>{title}</Text>
+      <Text style={theme.appBarTab}>{title}</Text>
     </Link>
   );
 };

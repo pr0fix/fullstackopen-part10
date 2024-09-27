@@ -1,9 +1,9 @@
 const theme = {
+  // General themes
   colors: {
     textPrimary: "#24292e",
     textSecondary: "#586069",
     primary: "#0366d6",
-    appBarPrimary: "#FFFFFF",
     mainBackground: "#e1e4e8",
   },
   fontSizes: {
@@ -17,6 +17,8 @@ const theme = {
     normal: "400",
     bold: "700",
   },
+
+  // RepositoryItem.jsx styles
   repositoryItem: {
     container: {
       flexDirection: "row",
@@ -49,6 +51,53 @@ const theme = {
     },
     stat: {
       alignItems: "center",
+    },
+  },
+
+  // AppBar.jsx styles
+  appBar: {
+    container: {
+      paddingTop: 60,
+      paddingLeft: 15,
+      paddingBottom: 30,
+      backgroundColor: "#24292e",
+    },
+    tabs: {
+      flexDirection: "row",
+    },
+    scrollView: {
+      flexGrow: 0,
+    },
+  },
+
+  // AppBar.jsx styles
+  appBarTab: {
+    color: "#FFFFFF",
+    fontWeight: "bold",
+    marginRight: 25,
+  },
+
+  // SignIn.jsx styles
+  signInForm: {
+    container: {
+      padding: 20,
+      backgroundColor: "white",
+      borderRadius: 5,
+    },
+    input: {
+      height: 60,
+      borderColor: "#ccc",
+      borderWidth: 1,
+      borderRadius: 5,
+      paddingHorizontal: 10,
+      marginBottom: 15,
+    },
+    error: {
+      color: "#d73a4a",
+      marginBottom: 10,
+    },
+    inputError: {
+      borderColor: "#d73a4a",
     },
   },
 };
