@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, TextInput, View, StyleSheet, Text } from "react-native";
+import { Button, TextInput, View, Text } from "react-native";
 import { Formik } from "formik";
 import * as yup from "yup";
 import theme from "../theme";
@@ -23,8 +23,7 @@ const SignIn = () => {
     const { username, password } = values;
 
     try {
-      const { data } = await signIn({ username, password });
-      console.log(data);
+      await signIn({ username, password });
     } catch (e) {
       console.log(e);
     }

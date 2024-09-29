@@ -1,11 +1,11 @@
 import React from "react";
-import { Text, StyleSheet } from "react-native";
+import { Text } from "react-native";
 import theme from "../theme";
 import { Link } from "react-router-native";
 
-const AppBarTab = ({ title, to }) => {
+const AppBarTab = ({ title, to, onPress }) => {
   return (
-    <Link to={to}>
+    <Link to={to} onPress={onPress}>
       <Text style={theme.appBarTab}>{title}</Text>
     </Link>
   );
