@@ -47,7 +47,7 @@ const RepositoryStats = ({ repository }) => (
 
 const RepositoryItem = ({ repository }) => {
   return (
-    <View style={theme.repositoryItem.container}>
+    <View style={theme.repositoryItem.container} testID="repositoryItem">
       <RepositoryAvatar uri={repository.ownerAvatarUrl} />
       <View style={theme.repositoryItem.details}>
         <RepositoryDetails repository={repository} />
