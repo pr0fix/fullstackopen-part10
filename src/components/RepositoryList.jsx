@@ -1,9 +1,12 @@
-import { Pressable, Text, FlatList, View, StyleSheet } from "react-native";
+import { Pressable, FlatList, View, StyleSheet } from "react-native";
 import RepositoryItem from "./RepositoryItem";
 import useRepositories from "../hooks/useRepositories";
 import { useNavigate, useParams } from "react-router-native";
 import { useQuery } from "@apollo/client";
 import { GET_REPOSITORY } from "../graphql/queries";
+import theme from "../theme";
+import { format } from "date-fns";
+import Text from "./Text";
 
 const styles = StyleSheet.create({
   separator: {
@@ -40,7 +43,41 @@ export const SingleRepositoryItem = () => {
 
   const repository = data.repository;
 
-  return <RepositoryItem repository={repository} showGithubButton={true} />;
+  return (
+    <>
+      <RepositoryItem repository={repository} showGithubButton={true} />
+      <RepositoryReviews repository={repository} />
+    </>
+  );
+};
+
+export const RepositoryReviews = ({ repository }) => {
+  const reviews = repository?.reviews?.edges || [];
+
+  const formatDate = (dateString) => {
+    return format(new Date(dateString), "dd.MM.yyyy");
+  };
+
+  return (
+    <FlatList
+      data={reviews}
+      ItemSeparatorComponent={ItemSeparator}
+      contentContainerStyle={{ paddingTop: 10 }}
+      keyExtractor={(item) => item.node.id}
+      renderItem={({ item }) => (
+        <View style={theme.reviews.reviewContainer}>
+          <View style={theme.reviews.ratingCircle}>
+            <Text style={theme.reviews.ratingText}>{item.node.rating}</Text>
+          </View>
+          <View style={theme.reviews.reviewContent}>
+            <Text fontWeight="bold">{item.node.user.username}</Text>
+            <Text color="textSecondary">{formatDate(item.node.createdAt)}</Text>
+            <Text>{item.node.text}</Text>
+          </View>
+        </View>
+      )}
+    />
+  );
 };
 
 const RepositoryList = () => {

@@ -59,8 +59,8 @@ const theme = {
       alignItems: "center",
     },
     buttonContainer: {
-      marginTop: 10
-    }
+      marginTop: 10,
+    },
   },
 
   // AppBar.jsx styles
@@ -107,6 +107,36 @@ const theme = {
     },
     inputError: {
       borderColor: "#d73a4a",
+    },
+  },
+
+  // RepositoryReviews.jsx
+  reviews: {
+    reviewContainer: {
+      flexDirection: "row",
+      padding: 10,
+      backgroundColor: "#fff",
+    },
+    ratingCircle: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      borderWidth: 2,
+      borderColor: "#007AFF",
+      justifyContent: "center",
+      alignItems: "center",
+      marginRight: 10,
+      marginLeft: 5
+    },
+    ratingText: {
+      fontWeight: "bold",
+      fontSize: 16,
+      color: "#007AFF",
+    },
+    reviewContent: {
+      flex: 1,
+      gap: 5,
+      marginLeft: 5
     },
   },
 };
