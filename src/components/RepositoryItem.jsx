@@ -1,4 +1,4 @@
-import { View, Image } from "react-native";
+import { View, Image, Linking, Pressable, StyleSheet } from "react-native";
 import Text from "./Text";
 import theme from "../theme";
 
@@ -11,8 +11,8 @@ const RepositoryAvatar = ({ uri }) => (
 );
 
 const RepositoryDetails = ({ repository }) => (
-  <View style={theme.repositoryItem.details}>
-    <Text fontWeight="bold" fontSize="subheading">
+  <View>
+    <Text fontWeight="bold" fontSize="subheading" style={{ marginBottom: 5 }}>
       {repository.fullName}
     </Text>
     <Text color="textSecondary">{repository.description}</Text>
@@ -45,16 +45,38 @@ const RepositoryStats = ({ repository }) => (
   </View>
 );
 
-const RepositoryItem = ({ repository }) => {
+const RepositoryItem = ({ repository, showGithubButton }) => {
   return (
     <View style={theme.repositoryItem.container} testID="repositoryItem">
       <RepositoryAvatar uri={repository.ownerAvatarUrl} />
       <View style={theme.repositoryItem.details}>
         <RepositoryDetails repository={repository} />
         <RepositoryStats repository={repository} />
+        {showGithubButton && (
+          <View style={theme.repositoryItem.buttonContainer}>
+            <Pressable
+              style={styles.button}
+              onPress={() => Linking.openURL(repository.url)}
+            >
+              <Text fontWeight="bold" style={styles.text}>
+                Open in GitHub
+              </Text>
+            </Pressable>
+          </View>
+        )}
       </View>
     </View>
   );
 };
-
+const styles = StyleSheet.create({
+  button: {
+    alignItems: "center",
+    borderRadius: 4,
+    padding: 20,
+    backgroundColor: "#0366d6",
+  },
+  text: {
+    color: "white",
+  },
+});
 export default RepositoryItem;

@@ -58,6 +58,9 @@ const theme = {
     stat: {
       alignItems: "center",
     },
+    buttonContainer: {
+      marginTop: 10
+    }
   },
 
   // AppBar.jsx styles

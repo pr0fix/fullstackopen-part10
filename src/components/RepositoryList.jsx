@@ -1,7 +1,9 @@
-import { Text } from "react-native";
-import { FlatList, View, StyleSheet } from "react-native";
+import { Pressable, Text, FlatList, View, StyleSheet } from "react-native";
 import RepositoryItem from "./RepositoryItem";
 import useRepositories from "../hooks/useRepositories";
+import { useNavigate, useParams } from "react-router-native";
+import { useQuery } from "@apollo/client";
+import { GET_REPOSITORY } from "../graphql/queries";
 
 const styles = StyleSheet.create({
   separator: {
@@ -12,18 +14,33 @@ const styles = StyleSheet.create({
 const ItemSeparator = () => <View style={styles.separator} />;
 
 export const RepositoryListContainer = ({ repositories }) => {
+  const navigate = useNavigate();
   return (
     <FlatList
       data={repositories}
       ItemSeparatorComponent={ItemSeparator}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
-        <View>
+        <Pressable onPress={() => navigate(`/repository/${item.id}`)}>
           <RepositoryItem repository={item} />
-        </View>
+        </Pressable>
       )}
     />
   );
+};
+
+export const SingleRepositoryItem = () => {
+  const { id } = useParams();
+  const { loading, data, error } = useQuery(GET_REPOSITORY, {
+    variables: { id },
+  });
+
+  if (loading) return <Text>Loading...</Text>;
+  if (error) return <Text>Error: {error.message}</Text>;
+
+  const repository = data.repository;
+
+  return <RepositoryItem repository={repository} showGithubButton={true} />;
 };
 
 const RepositoryList = () => {
