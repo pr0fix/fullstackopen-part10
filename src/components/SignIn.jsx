@@ -18,7 +18,7 @@ const loginValidationSchema = yup.object().shape({
 
 export const SignInContainer = ({ onSubmit }) => {
   return (
-    <View style={theme.signInForm.container}>
+    <View style={theme.forms.container}>
       <Formik
         validationSchema={loginValidationSchema}
         initialValues={{ username: "", password: "" }}
@@ -35,9 +35,9 @@ export const SignInContainer = ({ onSubmit }) => {
           <View>
             <TextInput
               style={[
-                theme.signInForm.input,
+                theme.forms.input,
                 touched.username && errors.username
-                  ? theme.signInForm.inputError
+                  ? theme.forms.inputError
                   : null,
               ]}
               placeholder="Username"
@@ -46,14 +46,14 @@ export const SignInContainer = ({ onSubmit }) => {
               value={values.username}
             />
             {errors.username && touched.username && (
-              <Text style={theme.signInForm.error}>{errors.username}</Text>
+              <Text style={theme.forms.error}>{errors.username}</Text>
             )}
 
             <TextInput
               style={[
-                theme.signInForm.input,
+                theme.forms.input,
                 touched.password && errors.password
-                  ? theme.signInForm.inputError
+                  ? theme.forms.inputError
                   : null,
               ]}
               placeholder="Password"
@@ -63,7 +63,7 @@ export const SignInContainer = ({ onSubmit }) => {
               value={values.password}
             />
             {errors.password && touched.password && (
-              <Text style={theme.signInForm.error}>{errors.password}</Text>
+              <Text style={theme.forms.error}>{errors.password}</Text>
             )}
 
             <Button title="Sign in" onPress={handleSubmit} />

@@ -87,7 +87,7 @@ const theme = {
   },
 
   // SignIn.jsx styles
-  signInForm: {
+  forms: {
     container: {
       padding: 20,
       backgroundColor: "white",
