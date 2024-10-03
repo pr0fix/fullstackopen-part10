@@ -8,11 +8,9 @@ import useSignIn from "../hooks/useSignIn";
 const loginValidationSchema = yup.object().shape({
   username: yup
     .string()
-    .min(3, ({ min }) => `Username must be at least ${min} characters long.`)
     .required("Username is required"),
   password: yup
     .string()
-    .min(8, ({ min }) => `Password must be at least ${min} characters long.`)
     .required("Password is required"),
 });
 
