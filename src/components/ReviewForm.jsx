@@ -3,16 +3,19 @@ import { Button, TextInput, View } from "react-native";
 import * as yup from "yup";
 import theme from "../theme";
 import Text from "./Text";
+import { useMutation } from "@apollo/client";
+import { CREATE_REVIEW } from "../graphql/mutations";
+import { useNavigate } from "react-router-native";
 
 const reviewValidationSchema = yup.object().shape({
-  repositoryOwner: yup.string().required("Repository owner name is required"),
+  ownerName: yup.string().required("Repository owner name is required"),
   repositoryName: yup.string().required("Repository name is required"),
   rating: yup
     .number()
     .min(0, "Rating must be at least 0")
     .max(100, "Rating must be at most 100")
     .required("Rating is required"),
-  review: yup.string().optional(),
+  text: yup.string().optional(),
 });
 
 export const ReviewFormContainer = ({ onSubmit }) => {
@@ -21,10 +24,10 @@ export const ReviewFormContainer = ({ onSubmit }) => {
       <Formik
         validationSchema={reviewValidationSchema}
         initialValues={{
-          repositoryOwner: "",
+          ownerName: "",
           repositoryName: "",
           rating: "",
-          review: "",
+          text: "",
         }}
         onSubmit={onSubmit}
       >
@@ -40,17 +43,17 @@ export const ReviewFormContainer = ({ onSubmit }) => {
             <TextInput
               style={[
                 theme.forms.input,
-                touched.repositoryOwner && errors.repositoryOwner
+                touched.ownerName && errors.ownerName
                   ? theme.forms.inputError
                   : null,
               ]}
               placeholder="Repository owner name"
-              onChangeText={handleChange("repositoryOwner")}
-              onBlur={handleBlur("repositoryOwner")}
-              value={values.repositoryOwner}
+              onChangeText={handleChange("ownerName")}
+              onBlur={handleBlur("ownerName")}
+              value={values.ownerName}
             />
-            {errors.repositoryOwner && touched.repositoryOwner && (
-              <Text style={theme.forms.error}>{errors.repositoryOwner}</Text>
+            {errors.ownerName && touched.ownerName && (
+              <Text style={theme.forms.error}>{errors.ownerName}</Text>
             )}
             <TextInput
               style={[
@@ -84,16 +87,16 @@ export const ReviewFormContainer = ({ onSubmit }) => {
             <TextInput
               style={[
                 theme.forms.input,
-                touched.review && errors.review ? theme.forms.inputError : null,
+                touched.text && errors.text ? theme.forms.inputError : null,
               ]}
               placeholder="Review"
               multiline
-              onChangeText={handleChange("review")}
-              onBlur={handleBlur("review")}
-              value={values.review}
+              onChangeText={handleChange("text")}
+              onBlur={handleBlur("text")}
+              value={values.text}
             />
-            {errors.review && touched.review && (
-              <Text style={theme.forms.error}>{errors.review}</Text>
+            {errors.text && touched.text && (
+              <Text style={theme.forms.error}>{errors.text}</Text>
             )}
 
             <Button title="Create a review" onPress={handleSubmit} />
@@ -105,14 +108,34 @@ export const ReviewFormContainer = ({ onSubmit }) => {
 };
 
 export const ReviewForm = () => {
+  const [sendReview, { loading, error }] = useMutation(CREATE_REVIEW);
+  const navigate = useNavigate();
   const onSubmit = async (values) => {
-    const { repositoryOwner, repositoryName, rating, review } = values;
+    const { ownerName, repositoryName, rating, text } = values;
 
     try {
-      console.log(repositoryOwner, repositoryName, rating, review);
+      const { data } = await sendReview({
+        variables: {
+          review: {
+            ownerName,
+            repositoryName,
+            rating: Number(rating),
+            text,
+          },
+        },
+      });
+      if (data) {
+        navigate(`/repository/${data.createReview.repositoryId}`);
+      }
     } catch (e) {
       console.log(e);
     }
   };
-  return <ReviewFormContainer onSubmit={onSubmit} />;
+  return (
+    <View>
+      <ReviewFormContainer onSubmit={onSubmit} />
+      {loading && <Text>Submitting review...</Text>}
+      {error && <Text>Error: {error.message}</Text>}
+    </View>
+  );
 };
