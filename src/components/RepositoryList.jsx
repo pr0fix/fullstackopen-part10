@@ -35,6 +35,7 @@ export const RepositoryListContainer = ({ repositories }) => {
 export const SingleRepositoryItem = () => {
   const { id } = useParams();
   const { loading, data, error } = useQuery(GET_REPOSITORY, {
+    fetchPolicy: "cache-and-network",
     variables: { id },
   });
 

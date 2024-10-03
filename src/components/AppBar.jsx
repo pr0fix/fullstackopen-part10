@@ -51,7 +51,10 @@ const AppBar = () => {
         <View style={theme.appBar.tabs}>
           <AppBarTab title="Repositories" to="/" />
           {isLoggedIn ? (
-            <AppBarTab title="Log out" onPress={handleLogOut} />
+            <>
+              <AppBarTab title="Create a review" to="/review"/>
+              <AppBarTab title="Log out" onPress={handleLogOut} />
+            </>
           ) : (
             <AppBarTab title="Sign in" to="/signin" />
           )}
