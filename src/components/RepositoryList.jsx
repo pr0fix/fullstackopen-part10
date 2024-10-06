@@ -5,12 +5,12 @@ import { useNavigate, useParams } from "react-router-native";
 import { useQuery } from "@apollo/client";
 import { GET_REPOSITORY } from "../graphql/queries";
 import theme from "../theme";
-import { format } from "date-fns";
 import Text from "./Text";
 import Selector from "./Selector";
 import React, { useState } from "react";
 import { Searchbar } from "react-native-paper";
 import { useDebounce } from "use-debounce";
+import { formatDate } from "../utils/formatDate";
 
 const styles = StyleSheet.create({
   separator: {
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const ItemSeparator = () => <View style={styles.separator} />;
+export const ItemSeparator = () => <View style={styles.separator} />;
 
 export const RepositoryListHeader = ({
   sortOption,
@@ -27,7 +27,7 @@ export const RepositoryListHeader = ({
   setSearchKeyword,
 }) => {
   return (
-    <View style={{gap: 5, marginBottom: 5}}>
+    <View style={{ gap: 5, marginBottom: 5 }}>
       <Searchbar
         style={{ backgroundColor: "white" }}
         placeholder="Search repositories..."
@@ -95,10 +95,6 @@ export const SingleRepositoryItem = () => {
 
 export const RepositoryReviews = ({ repository }) => {
   const reviews = repository?.reviews?.edges || [];
-
-  const formatDate = (dateString) => {
-    return format(new Date(dateString), "dd.MM.yyyy");
-  };
 
   return (
     <FlatList

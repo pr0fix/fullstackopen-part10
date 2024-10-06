@@ -5,7 +5,7 @@ import { Link } from "react-router-native";
 
 const AppBarTab = ({ title, to, onPress }) => {
   return (
-    <Link to={to} onPress={onPress}>
+    <Link to={to} onPress={onPress} underlayColor="transparent">
       <Text style={theme.appBarTab}>{title}</Text>
     </Link>
   );
