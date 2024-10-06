@@ -8,7 +8,9 @@ import theme from "../theme";
 import { format } from "date-fns";
 import Text from "./Text";
 import Selector from "./Selector";
-import { useState } from "react";
+import React, { useState } from "react";
+import { Searchbar } from "react-native-paper";
+import { useDebounce } from "use-debounce";
 
 const styles = StyleSheet.create({
   separator: {
@@ -18,28 +20,58 @@ const styles = StyleSheet.create({
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-export const RepositoryListContainer = ({
-  repositories,
+export const RepositoryListHeader = ({
   sortOption,
   setSortOption,
+  searchKeyword,
+  setSearchKeyword,
 }) => {
-  const navigate = useNavigate();
   return (
-    <FlatList
-      data={repositories}
-      ItemSeparatorComponent={ItemSeparator}
-      ListHeaderComponent={
-        <Selector sortOption={sortOption} setSortOption={setSortOption} />
-      }
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => (
-        <Pressable onPress={() => navigate(`/repository/${item.id}`)}>
-          <RepositoryItem repository={item} />
-        </Pressable>
-      )}
-    />
+    <View style={{gap: 5, marginBottom: 5}}>
+      <Searchbar
+        style={{ backgroundColor: "white" }}
+        placeholder="Search repositories..."
+        onChangeText={setSearchKeyword}
+        value={searchKeyword}
+      />
+      <Selector sortOption={sortOption} setSortOption={setSortOption} />
+    </View>
   );
 };
+
+export class RepositoryListContainer extends React.Component {
+  renderHeader = () => {
+    const { sortOption, setSortOption, searchKeyword, setSearchKeyword } =
+      this.props;
+
+    return (
+      <RepositoryListHeader
+        sortOption={sortOption}
+        setSortOption={setSortOption}
+        searchKeyword={searchKeyword}
+        setSearchKeyword={setSearchKeyword}
+      />
+    );
+  };
+
+  render() {
+    const { repositories, navigate } = this.props;
+
+    return (
+      <FlatList
+        data={repositories}
+        ItemSeparatorComponent={ItemSeparator}
+        ListHeaderComponent={this.renderHeader}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <Pressable onPress={() => navigate(`/repository/${item.id}`)}>
+            <RepositoryItem repository={item} />
+          </Pressable>
+        )}
+      />
+    );
+  }
+}
 
 export const SingleRepositoryItem = () => {
   const { id } = useParams();
@@ -91,13 +123,18 @@ export const RepositoryReviews = ({ repository }) => {
 };
 
 const RepositoryList = () => {
+  const navigate = useNavigate();
   const [sortOption, setSortOption] = useState({
     orderBy: "CREATED_AT",
     orderDirection: "DESC",
     sortValue: "latest",
   });
-
-  const { repositories, loading, error } = useRepositories(sortOption);
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [debouncedSearchKeyword] = useDebounce(searchKeyword, 500);
+  const { repositories, loading, error } = useRepositories(
+    sortOption,
+    debouncedSearchKeyword
+  );
 
   if (loading) return <Text>loading...</Text>;
 
@@ -106,8 +143,11 @@ const RepositoryList = () => {
   return (
     <RepositoryListContainer
       repositories={repositories}
+      navigate={navigate}
       sortOption={sortOption}
       setSortOption={setSortOption}
+      searchKeyword={searchKeyword}
+      setSearchKeyword={setSearchKeyword}
     />
   );
 };
