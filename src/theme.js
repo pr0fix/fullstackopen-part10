@@ -86,7 +86,7 @@ const theme = {
     marginRight: 25,
   },
 
-  // SignIn.jsx styles
+  // general form styles
   forms: {
     container: {
       padding: 20,
@@ -126,7 +126,7 @@ const theme = {
       justifyContent: "center",
       alignItems: "center",
       marginRight: 10,
-      marginLeft: 5
+      marginLeft: 5,
     },
     ratingText: {
       fontWeight: "bold",
@@ -136,7 +136,7 @@ const theme = {
     reviewContent: {
       flex: 1,
       gap: 5,
-      marginLeft: 5
+      marginLeft: 5,
     },
   },
 };

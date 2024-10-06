@@ -7,6 +7,8 @@ import { GET_REPOSITORY } from "../graphql/queries";
 import theme from "../theme";
 import { format } from "date-fns";
 import Text from "./Text";
+import Selector from "./Selector";
+import { useState } from "react";
 
 const styles = StyleSheet.create({
   separator: {
@@ -16,12 +18,19 @@ const styles = StyleSheet.create({
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-export const RepositoryListContainer = ({ repositories }) => {
+export const RepositoryListContainer = ({
+  repositories,
+  sortOption,
+  setSortOption,
+}) => {
   const navigate = useNavigate();
   return (
     <FlatList
       data={repositories}
       ItemSeparatorComponent={ItemSeparator}
+      ListHeaderComponent={
+        <Selector sortOption={sortOption} setSortOption={setSortOption} />
+      }
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
         <Pressable onPress={() => navigate(`/repository/${item.id}`)}>
@@ -82,13 +91,25 @@ export const RepositoryReviews = ({ repository }) => {
 };
 
 const RepositoryList = () => {
-  const { repositories, loading, error } = useRepositories();
+  const [sortOption, setSortOption] = useState({
+    orderBy: "CREATED_AT",
+    orderDirection: "DESC",
+    sortValue: "latest",
+  });
+
+  const { repositories, loading, error } = useRepositories(sortOption);
 
   if (loading) return <Text>loading...</Text>;
 
   if (error) return <Text>Error: {error.message}</Text>;
 
-  return <RepositoryListContainer repositories={repositories} />;
+  return (
+    <RepositoryListContainer
+      repositories={repositories}
+      sortOption={sortOption}
+      setSortOption={setSortOption}
+    />
+  );
 };
 
 export default RepositoryList;
