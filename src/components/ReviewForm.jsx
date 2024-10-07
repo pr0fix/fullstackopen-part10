@@ -1,5 +1,5 @@
 import { Formik } from "formik";
-import { Button, TextInput, View } from "react-native";
+import { Button, Pressable, TextInput, View } from "react-native";
 import * as yup from "yup";
 import theme from "../theme";
 import Text from "./Text";
@@ -98,8 +98,9 @@ export const ReviewFormContainer = ({ onSubmit }) => {
             {errors.text && touched.text && (
               <Text style={theme.forms.error}>{errors.text}</Text>
             )}
-
-            <Button title="Create a review" onPress={handleSubmit} />
+            <Pressable style={theme.forms.inputButton} onPress={handleSubmit}>
+              <Text style={theme.forms.inputButtonText}>Create a review</Text>
+            </Pressable>
           </View>
         )}
       </Formik>

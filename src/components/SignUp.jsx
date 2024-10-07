@@ -1,4 +1,4 @@
-import { View, TextInput, Button, Text } from "react-native";
+import { View, TextInput, Pressable, Text } from "react-native";
 import * as yup from "yup";
 import theme from "../theme";
 import { Formik } from "formik";
@@ -94,7 +94,9 @@ export const SignUpContainer = ({ onSubmit }) => {
               <Text style={theme.forms.error}>{errors.passwordConfirm}</Text>
             )}
 
-            <Button title="Sign up" onPress={handleSubmit} />
+            <Pressable style={theme.forms.inputButton} onPress={handleSubmit}>
+              <Text style={theme.forms.inputButtonText}>Sign up</Text>
+            </Pressable>
           </View>
         )}
       </Formik>

@@ -52,18 +52,21 @@ const RepositoryItem = ({ repository, showGithubButton }) => {
       <View style={theme.repositoryItem.details}>
         <RepositoryDetails repository={repository} />
         <RepositoryStats repository={repository} />
+        
+
         {showGithubButton && (
           <View style={theme.repositoryItem.buttonContainer}>
             <Pressable
-              style={styles.button}
+              style={theme.forms.inputButton}
               onPress={() => Linking.openURL(repository.url)}
-            >
+              >
               <Text fontWeight="bold" style={styles.text}>
                 Open in GitHub
               </Text>
             </Pressable>
           </View>
         )}
+        
       </View>
     </View>
   );
