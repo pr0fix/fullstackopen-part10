@@ -17,15 +17,12 @@ const useRepositories = (variables) => {
       return;
     }
 
-    const did = fetchMore({
+    fetchMore({
       variables: {
         after: data.repositories.pageInfo.endCursor,
         ...variables,
       },
     });
-    if (did) {
-      console.log("end");
-    }
   };
 
   const repositories = data?.repositories?.edges
