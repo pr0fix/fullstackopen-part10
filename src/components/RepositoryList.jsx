@@ -55,7 +55,7 @@ export class RepositoryListContainer extends React.Component {
   };
 
   render() {
-    const { repositories, navigate } = this.props;
+    const { repositories, navigate, onEndReach } = this.props;
 
     return (
       <FlatList
@@ -68,6 +68,8 @@ export class RepositoryListContainer extends React.Component {
             <RepositoryItem repository={item} />
           </Pressable>
         )}
+        onEndReached={onEndReach}
+        onEndReachedThreshold={0.5}
       />
     );
   }
@@ -127,10 +129,19 @@ const RepositoryList = () => {
   });
   const [searchKeyword, setSearchKeyword] = useState("");
   const [debouncedSearchKeyword] = useDebounce(searchKeyword, 500);
-  const { repositories, loading, error } = useRepositories(
-    sortOption,
-    debouncedSearchKeyword
-  );
+  const variables = {
+    orderBy: sortOption.orderBy,
+    orderDirection: sortOption.orderDirection,
+    searchKeyword: debouncedSearchKeyword,
+    first: 5,
+  };
+
+  const { repositories, loading, error, fetchMore } =
+    useRepositories(variables);
+
+  const onEndReach = () => {
+    fetchMore();
+  };
 
   if (loading) return <Text>loading...</Text>;
 
@@ -140,6 +151,7 @@ const RepositoryList = () => {
     <RepositoryListContainer
       repositories={repositories}
       navigate={navigate}
+      onEndReach={onEndReach}
       sortOption={sortOption}
       setSortOption={setSortOption}
       searchKeyword={searchKeyword}
