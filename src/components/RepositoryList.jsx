@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import { Searchbar } from "react-native-paper";
 import { useDebounce } from "use-debounce";
 import { formatDate } from "../utils/formatDate";
+import useRepository from "../hooks/useRepository";
 
 const styles = StyleSheet.create({
   separator: {
@@ -77,25 +78,29 @@ export class RepositoryListContainer extends React.Component {
 
 export const SingleRepositoryItem = () => {
   const { id } = useParams();
-  const { loading, data, error } = useQuery(GET_REPOSITORY, {
-    fetchPolicy: "cache-and-network",
-    variables: { id },
-  });
+  const variables = {
+    id,
+    first: 5,
+  };
+
+  const { repository, loading, error, fetchMore } = useRepository(variables);
+
+  const onEndReach = () => {
+    fetchMore();
+  };
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error: {error.message}</Text>;
 
-  const repository = data.repository;
-
   return (
     <>
       <RepositoryItem repository={repository} showGithubButton={true} />
-      <RepositoryReviews repository={repository} />
+      <RepositoryReviews repository={repository} onEndReach={onEndReach} />
     </>
   );
 };
 
-export const RepositoryReviews = ({ repository }) => {
+export const RepositoryReviews = ({ repository, onEndReach }) => {
   const reviews = repository?.reviews?.edges || [];
 
   return (
@@ -116,6 +121,8 @@ export const RepositoryReviews = ({ repository }) => {
           </View>
         </View>
       )}
+      onEndReached={onEndReach}
+      onEndReachedThreshold={0.5}
     />
   );
 };
